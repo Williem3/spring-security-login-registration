@@ -41,7 +41,7 @@
 				<div style="padding-top: 30px" class="panel-body">
 
 					<!-- Registration Form -->
-					<form:form action="${pageContext.request.contextPath}/customer/processRegistrationForm"
+					<form:form action="${pageContext.request.contextPath}/employee/processRegistrationForm"
 						  	   modelAttribute="crmUser"
 						  	   class="form-horizontal">
 
