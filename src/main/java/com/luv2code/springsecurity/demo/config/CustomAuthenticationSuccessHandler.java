@@ -7,19 +7,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.luv2code.springsecurity.demo.entity.Customer;
+import com.luv2code.springsecurity.demo.entity.Employee;
+import com.luv2code.springsecurity.demo.service.CustomerService;
+import com.luv2code.springsecurity.demo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.luv2code.springsecurity.demo.entity.User;
-import com.luv2code.springsecurity.demo.service.UserService;
-
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
+
     @Autowired
-    private UserService userService;
+    private CustomerService customerService;
+
+
+    @Autowired
+	private EmployeeService employeeService;
 
     // create custom Authenticate method
 	@Override
@@ -33,12 +40,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 		
 		System.out.println("userName=" + userName);
 
-		// declare theUser as findByUserName through userService.
-		User theUser = userService.findByUserName(userName);
+		// declare theUser as findByUserName through employeeService and customerService.
+		Customer theCustomer = customerService.findByUserName(userName);
+
 		
 		// now place in the session
 		HttpSession session = request.getSession();
-		session.setAttribute("user", theUser);
+		session.setAttribute("customer", theCustomer);
 		
 		// forward to home page
 		response.sendRedirect(request.getContextPath() + "/");
