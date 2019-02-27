@@ -1,10 +1,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 
 <head>
-	<title>luv2code Company Home Page</title>
+	<title>Pie Puller Home Page</title>
 
 	<!-- link to css file in resources folder -->
 	<link href="${pageContext.request.contextPath}/resources/css/navigation.css" rel="stylesheet" type="text/css"  >
@@ -25,7 +26,7 @@
 	</p>
 	
 	<hr>
-	
+
 	<!-- display user name and role -->
 	<p>
 		User: <security:authentication property="principal.username" />
@@ -33,50 +34,63 @@
 		Role(s): <security:authentication property="principal.authorities" />
 		<br><br>
 		<!-- user.variable declared earlier -->
-		Name: ${user.firstName} ${user.lastName}
+		ID: ${customer.id} ${employee.id}
 		<br>
-		Email: ${user.email}
+		Username: ${customer.userName} ${employee.userName}
 		<br>
-		Address: ${user.address}
+		Email: ${customer.email} ${employee.email}
 		<br>
-		Zip Code: ${user.zipcode}
+		Address: ${customer.address} ${employee.address}
 		<br>
-		Phone Number: ${user.phoneNumber}
+		Zip Code: ${customer.zipcode} ${employee.zipcode}
+		<br>
+		Phone Number: ${customer.phoneNumber} ${employee.phoneNumber}
 	</p>
-	
+
 	<security:authorize access="hasRole('MANAGER')">
-	
+
 		<!-- Add a link to point to /leaders ... this is for the managers -->
-		
+
 		<p>
 			<a href="${pageContext.request.contextPath}/leaders">Leadership Meeting</a>
-			(Only for Manager peeps)
+			(Only for Managers)
 		</p>
 
-	</security:authorize>	
-	
-	
-	<security:authorize access="hasRole('ADMIN')">  
+	</security:authorize>
+
+
+	<security:authorize access="hasRole('ADMIN')">
 
 		<!-- Add a link to point to /systems ... this is for the admins -->
-		
+
 		<p>
 			<a href="${pageContext.request.contextPath}/systems">IT Systems Meeting</a>
-			(Only for Admin peeps)
+			(Only for Admins)
 		</p>
-	
+
 	</security:authorize>
-	
+
+	<security:authorize access="hasAnyRole('EMPLOYEE', 'ADMIN', 'MANAGER')">
+
+		<!-- Add a link to point to /customer/list ... this is for the admins and managers to manage -->
+
+		<p>
+			<a href="${pageContext.request.contextPath}/customer/list">Customer List</a>
+			(Only for Admins and Managers)
+		</p>
+
+	</security:authorize>
+
+	<security:authorize access = "hasAnyRole('ADMIN', 'MANAGER')">
+		<!-- Add a link to point to /employee/list, this will be accessible only by Managers and Admins -->
+
+		<p>
+			<a href="${pageContext.request.contextPath}/employee/list">Employee List</a>
+		</p>
+	</security:authorize>
+
 	<hr>
 
-
-	<!-- Add a edit user information button -->
-	<form:form action="${pageContext.request.contextPath}/editUserInfo"
-			   method="GET">
-
-		<input type="submit" value="Edit Profile" />
-
-	</form:form>
 	<!-- Add a logout button -->
 	<form:form action="${pageContext.request.contextPath}/logout" 
 			   method="POST">
@@ -86,7 +100,7 @@
 	</form:form>
 
 
-	
+
 </body>
 
 </html>
